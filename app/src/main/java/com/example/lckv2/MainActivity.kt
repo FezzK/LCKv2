@@ -4,69 +4,39 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.viewpager.widget.PagerAdapter
 import androidx.viewpager.widget.ViewPager
 import com.example.lckv2.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private var vBinding : ActivityMainBinding? = null
-    private val binding get() = vBinding!!
-
-    var viewList = ArrayList<View>()
-
+    private lateinit var binding : ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        vBinding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        viewList.add(layoutInflater.inflate(R.layout.fragment_main, null))
-        viewList.add(layoutInflater.inflate(R.layout.fragment_match, null))
-        viewList.add(layoutInflater.inflate(R.layout.fragment_rank, null))
-
-        binding.viewPager.adapter = pagerAdapter()
-
-        binding.viewPager.addOnPageChangeListener(object : ViewPager.SimpleOnPageChangeListener() {
-            override fun onPageSelected(position: Int) {
-                when(position) {
-                    0 -> binding.navigationView.selectedItemId = R.id.main
-                    1 -> binding.navigationView.selectedItemId = R.id.match
-                    2 -> binding.navigationView.selectedItemId = R.id.rank
-                }
-            }
-        })
+        replaceFragment(MainFragment())
 
         binding.navigationView.setOnItemSelectedListener {
             when(it.itemId) {
-                R.id.main -> binding.viewPager.setCurrentItem(0)
-                R.id.match -> binding.viewPager.setCurrentItem(1)
-                R.id.rank -> binding.viewPager.setCurrentItem(2)
+                R.id.main -> replaceFragment(MainFragment())
+                R.id.match -> replaceFragment(MatchFragment())
+                R.id.rank -> replaceFragment(RankFragment())
+
+                else -> {
+
+                }
             }
-            return@setOnItemSelectedListener true
-
+            true
         }
     }
 
-    inner class pagerAdapter : PagerAdapter() {
-        override fun getCount() = viewList.size
-
-        override fun isViewFromObject(view: View, `object`: Any) = view == `object`
-
-        override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            var curView = viewList[position]
-            binding.viewPager.addView(curView)
-            return curView
-        }
-
-        override fun destroyItem(container: ViewGroup, position: Int, `object`: Any) {
-            binding.viewPager.removeView(`object` as View)
-        }
-
+    private fun replaceFragment(fragment: Fragment) {
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frame_layout, fragment)
+        fragmentTransaction.commit()
     }
 
-    override fun onDestroy() {
-        vBinding = null
-
-        super.onDestroy()
-    }
 }

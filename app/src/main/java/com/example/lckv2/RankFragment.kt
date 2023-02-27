@@ -5,6 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -20,6 +22,13 @@ class RankFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    private lateinit var adapter : RankAdapter
+    private lateinit var recyclerView: RecyclerView
+    private lateinit var rankArrayList: ArrayList<Rank>
+
+    lateinit var imageId : Array<Int>
+    lateinit var teamname : Array<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,5 +64,52 @@ class RankFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        dataInitialize()
+        val layoutManager = LinearLayoutManager(context)
+        recyclerView = view.findViewById(R.id.recycler_view)
+        recyclerView.layoutManager = layoutManager
+        recyclerView.setHasFixedSize(true)
+        adapter = RankAdapter(rankArrayList)
+        recyclerView.adapter = adapter
+
+    }
+    private fun dataInitialize() {
+
+        rankArrayList = arrayListOf<Rank>()
+
+        imageId = arrayOf(
+            R.drawable.ic_launcher_background,
+            R.drawable.ic_launcher_background,
+            R.drawable.ic_launcher_background,
+            R.drawable.ic_launcher_background,
+            R.drawable.ic_launcher_background,
+            R.drawable.ic_launcher_background,
+            R.drawable.ic_launcher_background,
+            R.drawable.ic_launcher_background,
+            R.drawable.ic_launcher_background,
+            R.drawable.ic_launcher_background,
+            )
+
+        teamname = arrayOf(
+            getString(R.string.R1),
+            getString(R.string.R1),
+            getString(R.string.R1),
+            getString(R.string.R1),
+            getString(R.string.R1),
+            getString(R.string.R1),
+            getString(R.string.R1),
+            getString(R.string.R1),
+            getString(R.string.R1),
+            getString(R.string.R1),
+            )
+
+        for(i in imageId.indices) {
+            val rank = Rank(imageId[i], teamname[i])
+            rankArrayList.add(rank)
+        }
     }
 }

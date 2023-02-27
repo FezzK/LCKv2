@@ -7,9 +7,7 @@ android {
     namespace 'com.example.lckv2'
     compileSdk 33
 
-    viewBinding {
-        enabled true
-    }
+
 
     defaultConfig {
         applicationId "com.example.lckv2"
@@ -27,6 +25,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
